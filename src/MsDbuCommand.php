@@ -284,7 +284,7 @@ class MsDbuCommand extends WP_CLI_Command {
          * we get to platform.sh and need to replace it with platform.sh.ddev.site
          * foo.platform.sh.ddev.site --> foo.platform.sh.ddev.site.ddev.site
          */
-        $mainPositional[] = '(?<!\.)'.preg_quote('/'.$domainSearch,'/'); //search position
+        $mainPositional[] = '(?<!\.)'.preg_quote($domainSearch,'/'); //search position
         $mainPositional[] = $domainReplace; // replace position
         $mainPositional = [...$mainPositional,...$this->mainTables]; // tables
         $associative['include-columns'] = implode(',',$this->searchMainColumns);

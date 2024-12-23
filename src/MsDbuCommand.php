@@ -277,7 +277,14 @@ class MsDbuCommand extends WP_CLI_Command {
        */
       if (!$this->subdirectoryType) {
         WP_CLI::debug("This is a (multi|sub)domain multisite.");
-        $mainPositional[] = '(?<!\.)'.preg_quote($domainSearch,'/'); //search position
+        /**
+         * Why are we adding a forward slash at the beginning? because it's possible the replacement domains of previous
+         * domains contain this same domain, and will end up being replaced a second time.
+         * ie foo.platform.sh --> foo.platform.sh.ddev.site
+         * we get to platform.sh and need to replace it with platform.sh.ddev.site
+         * foo.platform.sh.ddev.site --> foo.platform.sh.ddev.site.ddev.site
+         */
+        $mainPositional[] = '(?<!\.)'.preg_quote('/'.$domainSearch,'/'); //search position
         $mainPositional[] = $domainReplace; // replace position
         $mainPositional = [...$mainPositional,...$this->mainTables]; // tables
         $associative['include-columns'] = implode(',',$this->searchMainColumns);
